@@ -1,0 +1,148 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.BuscarProdutoViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Inventário de Estoque";
+    int cont = 0;
+}
+
+<div class="content-heading">
+    @ViewBag.Title
+    <small>Formulario de busca de produtos!</small>
+</div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- START panel-->
+            <div id="panelDemo14" class="panel panel-default">
+                <div class="panel-heading">Relacionar Inventário</div>
+                <div class="panel-body">
+                    <div role="tabpanel">
+                        <!-- Nav tabs-->
+                        <ul role="tablist" class="nav nav-tabs">
+                            <li role="presentation" class="active">
+                                <a href="#codigo" aria-controls="codigo" role="tab" data-toggle="tab">Todo o Estoque</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes-->
+                        <div class="tab-content">
+
+                            <div id="codigo" role="tabpanel" class="tab-pane active">
+                                @using (Html.BeginForm("Inventario", "Produto", FormMethod.Post))
+                                {
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.StatusDoProduto, new { @class = "control-label" })
+                                            @Html.EnumDropDownListFor(model => model.StatusDoProduto, new { @class = "form-control", @placeholder = "Descrição", @Required = "required"})
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.LocalidadeId)
+                                            @Html.DropDownListFor(model => model.LocalidadeId, (SelectList)ViewBag.ListaLocalidade, new { @class = "form-control", @Required = "required" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.SessaoId)
+                                            @Html.DropDownListFor(model => model.SessaoId, (SelectList)ViewBag.ListaSessao, null, new {@class = "form-control"})
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Buscar</button>
+                                    </div>
+                                }
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END panel-->
+    </div>
+
+    @if (Model != null && Model.ProdutosEmEstoqueViewModelsCollection.Any())
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Data Tables |
+                        <small>Zero Configuration + Export Buttons</small>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table id="datatable1" class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descrição</th>
+                                        <th>Material</th>
+                                        <th>Marca</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ProdutosEmEstoqueViewModelsCollection)
+                                    {
+                                        <tr>
+                                            <td>@cont</td>
+                                            <td>@item.Descricao</td>
+                                            <td>@item.Material.Descricao</td>
+                                            <td>@item.Marca.Descricao</td>
+                                            <td>R$@item.ValorCompra</td>
+                                        </tr>
+                                        cont++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatablesCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/demoDatatable")
+
+    <script>
+        $(document).ready(function () {
+            valor = $("#LocalidadeId").val();
+            CapturarSessaoDaLocalidade(valor);
+        });
+
+        $("#LocalidadeId").on("change",
+            function() {
+                valor = $(this).val();
+                CapturarSessaoDaLocalidade(valor);
+            });
+
+        function CapturarSessaoDaLocalidade(valor) {
+            $sessao = $('#SessaoId');
+            $.ajax({
+                url: '@Url.Action("RetornarSessaoDaLocalidade","Sessao")',
+                type: 'GET',
+                async: true,
+                data: {
+                    localidadeId: valor
+                }
+            }).done(function (data) {
+                if (data.length > 0) {
+                    var option = "";
+                    for (i = 0; i < data.length; i++) {
+                        option += "<option value=\"" + data[i].Id + "\">" + data[i].Descricao + "</option>";
+                    }
+                    $sessao.html(option).trigger("chosen:updated");
+                } else {
+                    $sessao.html('<option></option>').trigger("chosen:updated");
+                }
+            }).fail(function (data) {
+                $sessao.html('<option></option>').trigger("chosen:updated");
+            });
+        }
+    </script>
+}

@@ -1,0 +1,129 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.AlertaViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Editar Alerta";
+}
+
+<h3>
+    @ViewBag.Title
+    <small>Formulário de edição de alerta</small>
+</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <fieldset>
+                <legend>Dados Cadastrais</legend>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", @placeholder = "Descrição" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.CondicaoDeAlerta, new { @class = "control-label" })
+                        @Html.EnumDropDownListFor(model => model.CondicaoDeAlerta, new { @class = "form-control", @placeholder = "Descrição" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Quantidade, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Quantidade, new { htmlAttributes = new { @class = "form-control", @placeholder = "Descrição" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="cond1" class="form-group col-md-4">
+                        <label class="control-label">Condição 1</label>
+                        @Html.TextBox("Condicao1", null, new { @class = "form-control" })
+                    </div>
+                    <div id="cond2" class="form-group col-md-4">
+                        <label class="control-label">Condição 2</label>
+                        @Html.TextBox("Condicao2", null, new { @class = "form-control" })
+                    </div>
+                    <div id="cond3" class="form-group col-md-4">
+                        <label class="control-label">Condição 3</label>
+                        @Html.TextBox("Condicao3", null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </fieldset>
+            <div class="text-center">
+                @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-sm btn-default" })
+                <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#cond1").hide();
+            $("#cond2").hide();
+            $("#cond3").hide();
+        });
+
+        $("#CondicaoDeAlerta").on("change", function () {
+            var val = $(this).val();
+            switch (val) {
+            case "1":
+                $("#cond1").hide(500);
+                $("#cond2").hide(500);
+                $("#cond3").hide(500);
+                break;
+            case "2":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Armário, gaveta, armazenamento..");
+                break;
+            case "3":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Loja ou Estoque");
+                break;
+            case "4":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Marca do produto");
+                break;
+            case "5":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Modelo do produto");
+                break;
+            case "6":
+                $("#cond1").show(500);
+                $("#cond2").show(500);
+                $("#cond3").show(500);
+                $("#Condicao1").attr("placeholder", "Tamanho Ponte");
+                $("#Condicao2").attr("placeholder", "Comprimento Lente");
+                $("#Condicao3").attr("placeholder", "Comprimenro Haste");
+                break;
+            case "7":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Valor máximo de produto em estoque");
+                break;
+            case "8":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Valor mínimo de produto em estoque");
+                break;
+            case "9":
+                $("#cond1").show(500);
+                $("#cond2").hide();
+                $("#cond3").hide();
+                $("#Condicao1").attr("placeholder", "Tempo mínimo em dias em estoque");
+                break;
+            default:
+            }
+        });
+    </script>
+}

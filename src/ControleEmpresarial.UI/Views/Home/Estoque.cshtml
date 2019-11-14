@@ -1,0 +1,100 @@
+﻿@model IEnumerable<ControleEmpresarial.Estoque.Application.ViewModel.ProdutoViewModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Módulo de Estoque";
+}
+
+<div class="content-heading">
+    @ViewBag.Title
+    <small>Informações e registro de produtos!</small>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-sm-6">
+        <!-- START widget-->
+        <div class="panel widget">
+            <div class="row row-table">
+                <div class="col-xs-4 text-center bg-info pv-lg">
+                    <em class="icon-handbag fa-3x"></em>
+                </div>
+                <div class="col-xs-8 pv-lg">
+                    <div class="h2 mt0">@ViewBag.TotalEstoque <small>Produtos</small></div>
+                    <div class="text-uppercase">Em estoque</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <!-- START widget-->
+        <div class="panel widget bg-danger-light">
+            <div class="row row-table">
+                <div class="col-xs-4 text-center bg-danger-dark pv-lg">
+                    <em class="fa fa-usd fa-3x"></em>
+                </div>
+                <div class="col-xs-8 pv-lg">
+                    <div class="h2 mt0">
+                        @ViewBag.ValorEntrada
+                    </div>
+                    <div class="text-uppercase">saída do mês</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <!-- START widget-->
+        <div class="panel widget bg-green">
+            <div class="row row-table">
+                <div class="col-xs-4 text-center bg-green-dark pv-lg">
+                    <em class="fa fa-usd fa-3x"></em>
+                </div>
+                <div class="col-xs-8 pv-lg">
+                    <div class="h2 mt0">@ViewBag.ValorSaida</div>
+                    <div class="text-uppercase">entrada do mês</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <!-- START date widget-->
+        <div class="panel widget">
+            <div class="row row-table">
+                <div class="col-xs-4 text-center bg-info pv-lg">
+                    <!-- See formats: https://docs.angularjs.org/api/ng/filter/date-->
+                    <div data-now="" data-format="MMMM" class="text-sm"></div>
+                    <br />
+                    <div data-now="" data-format="D" class="h2 mt0"></div>
+                </div>
+                <div class="col-xs-8 pv-lg">
+                    <div data-now="" data-format="dddd" class="text-uppercase"></div>
+                    <br />
+                    <div data-now="" data-format="h:mm" class="h2 mt0"></div>
+                    <div data-now="" data-format="a" class="text-muted text-sm"></div>
+                </div>
+            </div>
+        </div>
+        <!-- END date widget    -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <!-- START widget-->
+        <div class="panel panel-default">
+            <div class="panel-heading">Line</div>
+            <div class="panel-body">
+                <div id="morris-line"></div>
+            </div>
+        </div>
+        <!-- END widget-->
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/MorrisCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/Morris")
+    @Scripts.Render("~/bundles/sparklines")
+    @Scripts.Render("~/bundles/moment")
+}

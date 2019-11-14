@@ -1,0 +1,115 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.AlertaViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Detalhar Produto";
+}
+
+
+<h3>
+    @ViewBag.Title
+    <small>Formulário de detahamento de alerta</small>
+</h3>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset>
+            <legend>Dados Cadastrais</legend>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.CondicaoDeAlerta, new { @class = "control-label" })
+                    @Html.EnumDropDownListFor(model => model.CondicaoDeAlerta, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Quantidade, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Quantidade, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+            <div class="row">
+                @if (!string.IsNullOrEmpty(Model.Condicao1))
+                {
+                    <div id="cond1" class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Condicao1, new {@class = "control-label"})
+                        @Html.EditorFor(model => model.Condicao1, new {htmlAttributes = new {@class = "form-control", @disabled = "disabled" } })
+                    </div>
+                }
+                
+                @if (!string.IsNullOrEmpty(Model.Condicao2))
+                {
+                    <div id="cond1" class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Condicao2, new {@class = "control-label"})
+                        @Html.EditorFor(model => model.Condicao2, new {htmlAttributes = new {@class = "form-control", @disabled = "disabled" } })
+                    </div>
+                }
+                
+                @if (!string.IsNullOrEmpty(Model.Condicao3))
+                {
+                    <div id="cond1" class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Condicao3, new {@class = "control-label"})
+                        @Html.EditorFor(model => model.Condicao3, new {htmlAttributes = new {@class = "form-control", @disabled = "disabled" } })
+                    </div>
+                }
+            </div>
+        </fieldset>
+        <div class="row text-center">
+            @Html.ActionLink("Voltar", "Estoque", "Home", null, new { @class = "btn btn-sm btn-default" })
+            <button id="deletarAlerta" type="button" class="btn btn-sm btn-danger">Deletar</button>
+            @Html.HiddenFor(model => model.Id)
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+        $(document).ready(function () {
+            $('#deletarAlerta').on('click', function (e) {
+                e.preventDefault();
+                swal({
+                    title: "Tem certeza disso?",
+                    text: "Você não poderá recuperar esse alerta!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sim, deletar isso!",
+                    cancelButtonText: "Não, cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        var valor = $("#Id").val();
+                        excluirAlerta(valor);
+                    } else {
+                        swal("Cancelado", "Não houve alteração nos dados :)", "error");
+                    }
+                });
+            });
+
+            function excluirAlerta(valor) {
+                $.ajax({
+                    url: '@Url.Action("Delete","Alerta")',
+                    type: 'POST',
+                    async: true,
+                    data: {
+                        id: valor
+                    }
+                }).success(function (data) {
+                    swal("Deletado!", "Categoria excluida com sucesso.", "success");
+                }).fail(function (data) {
+                    swal("Erro!", "Erro ao excluir alerta.", "warning");
+                }).done(function(data) {
+                    window.location.replace('@Url.Action("BuscarAlerta")');
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.BuscarProdutoViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Buscar Produtos";
+}
+
+<div class="content-heading">
+    @ViewBag.Title
+    <small>Formulario de busca de produtos!</small>
+</div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- START panel-->
+            <div class="panel panel-default">
+                <div class="panel-heading">Buscar Produtos</div>
+                <div id="filtro" class="panel-body">
+                    @Html.Partial("_NavPesquisa", Model)
+                </div>
+            </div>
+        </div>
+        <!-- END panel-->
+    </div>
+</div>
+
+
+<!-- JSON-->
+<div id="listaProdutos" class="container-fluid"></div>
+
+@section Styles
+{
+    @Styles.Render("~/bundles/typeaheadCss")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryajax")
+    @Scripts.Render("~/bundles/typeaheadJs")
+    <script>
+        $(document).ready(function () {
+            $("#Codigo").val("");
+            $("#Codigo").focus();
+            valor = $("#LocalidadeId").val();
+            CapturarSessaoDaLocalidade(valor);
+        });
+
+        $("#btnFocus").on("click", function () {
+            $("#Codigo").focus();
+        });
+
+        function BuscarRegistroFalhou() {
+            
+        }
+
+        function BuscarRegistroOk() {
+            
+        }
+
+        $("#LocalidadeId").on("change",
+            function() {
+                valor = $(this).val();
+                CapturarSessaoDaLocalidade(valor);
+            });
+
+        function CapturarSessaoDaLocalidade(valor) {
+            $sessao = $('#SessaoId');
+            $.ajax({
+                url: '@Url.Action("RetornarSessaoDaLocalidade","Sessao")',
+                type: 'GET',
+                async: true,
+                data: {
+                    localidadeId: valor
+                }
+            }).done(function (data) {
+                if (data.length > 0) {
+                    var option = "";
+                    for (i = 0; i < data.length; i++) {
+                        option += "<option value=\"" + data[i].Id + "\">" + data[i].Descricao + "</option>";
+                    }
+                    $sessao.html(option).trigger("chosen:updated");
+                } else {
+                    $sessao.html('<option></option>').trigger("chosen:updated");
+                }
+            }).fail(function (data) {
+                $sessao.html('<option></option>').trigger("chosen:updated");
+            });
+        }
+    </script>
+}

@@ -1,0 +1,124 @@
+﻿@using ControleEmpresarial.UI.Helpers
+@model ControleEmpresarial.Estoque.Application.ViewModel.BuscarProdutoViewModel
+@{
+    Layout = null;
+}
+
+<div role="tabpanel">
+    <!-- Nav tabs-->
+    <ul role="tablist" class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a href="#codigo" aria-controls="codigo" role="tab" data-toggle="tab">Busca Por Código</a>
+        </li>
+        <li role="presentation">
+            <a href="#dados" aria-controls="dados" role="tab" data-toggle="tab">Busca Por Marca, Categoria ou Modelo</a>
+        </li>
+        <li role="presentation">
+            <a href="#especificacao" aria-controls="especificacao" role="tab" data-toggle="tab">Buscar Por Especificação Técnica</a>
+        </li>
+        <li role="presentation">
+            <a href="#localidade" aria-controls="localidade" role="tab" data-toggle="tab">Busca Por Localidade</a>
+        </li>
+    </ul>
+    <!-- Tab panes-->
+    <div class="tab-content">
+
+        <div id="codigo" role="tabpanel" class="tab-pane active">
+            @using (Ajax.BeginForm("BuscarProdutoPorCodigo", null, new AjaxOptions { HttpMethod = "GET", OnSuccess = "BuscarRegistroOk", OnFailure = "BuscarRegistroFalhou", OnBegin = "Requisitando", OnComplete = "Completado", UpdateTargetId = "listaProdutos", InsertionMode = InsertionMode.Replace }, new { id = "buscarFrequencia" }))
+            {
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Codigo, new { @class = "control-label" })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Código" } })
+                            <span class="input-group-btn">
+                                <button id="btnFocus" type="button" class="btn btn-default">
+                                    <em class="fa fa-barcode"></em>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-sm btn-primary">Pesquisar</button>
+                </div>
+            }
+        </div>
+
+        <div id="dados" role="tabpanel" class="tab-pane">
+            @using (Ajax.BeginForm("BuscarProdutoPorDados", null, new AjaxOptions { HttpMethod = "GET", OnSuccess = "BuscarRegistroOk", OnFailure = "BuscarRegistroFalhou", OnBegin = "Requisitando", OnComplete = "Completado", UpdateTargetId = "listaProdutos", InsertionMode = InsertionMode.Replace }, new { id = "buscarFrequencia" }))
+            {
+                @Html.HiddenFor(model => model.MarcaId)
+                @Html.HiddenFor(model => model.CategoriaId)
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Modelo, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Modelo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Modelo" } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.MarcaId)
+                        @Html.AutocompleteFor(model => model.Marca.Descricao, model => model.MarcaId, "CapturarMarcasAutoComplete", "Marca", false)
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.CategoriaId)
+                        @Html.AutocompleteFor(model => model.Categoria.Descricao, model => model.CategoriaId, "CapturarCategoriaAutoComplete", "Categoria", false)
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-sm btn-primary">Pesquisar</button>
+                </div>
+            }
+        </div>
+
+        <div id="especificacao" role="tabpanel" class="tab-pane">
+            @using (Ajax.BeginForm("BuscarProdutoPorEspecificacao", null, new AjaxOptions { HttpMethod = "GET", OnSuccess = "BuscarRegistroOk", OnFailure = "BuscarRegistroFalhou", OnBegin = "Requisitando", OnComplete = "Completado", UpdateTargetId = "listaProdutos", InsertionMode = InsertionMode.Replace }, new { id = "buscarFrequencia" }))
+            {
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.TamanhoAro, new { @class = "control-label" })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.TamanhoAro, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tamanho do Aro" } })
+                            <span class="input-group-addon">
+                                <em class="fa fa-square-o"></em>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.TamanhoPonte, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TamanhoPonte, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tamanho da Ponte" } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.ComprimentoHaste, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.ComprimentoHaste, new { htmlAttributes = new { @class = "form-control", @placeholder = "Comprimento da Haste" } })
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-sm btn-primary">Pesquisar</button>
+                </div>
+            }
+        </div>
+
+        <div id="localidade" role="tabpanel" class="tab-pane">
+            @using (Ajax.BeginForm("BuscarProdutoPorLocalidade", null, new AjaxOptions { HttpMethod = "GET", OnSuccess = "BuscarRegistroOk", OnFailure = "BuscarRegistroFalhou", OnBegin = "Requisitando", OnComplete = "Completado", UpdateTargetId = "listaProdutos", InsertionMode = InsertionMode.Replace }, new { id = "buscarFrequencia" }))
+            {
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.StatusDoProduto, new { @class = "control-label" })
+                        @Html.EnumDropDownListFor(model => model.StatusDoProduto, new { @class = "form-control", @placeholder = "Descrição", @Required = "required"})
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.LocalidadeId)
+                        @Html.DropDownListFor(model => model.LocalidadeId, (SelectList)ViewBag.ListaLocalidade, new { @class = "form-control", @Required = "required" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.SessaoId)
+                        @Html.DropDownListFor(model => model.SessaoId, (SelectList)ViewBag.ListaSessao, null, new {@class = "form-control"})
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-sm btn-primary">Pesquisar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

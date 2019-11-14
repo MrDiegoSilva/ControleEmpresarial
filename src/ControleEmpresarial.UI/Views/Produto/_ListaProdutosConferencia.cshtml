@@ -1,0 +1,85 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.BuscarProdutoViewModel
+@{
+    Layout = null;
+    int cont = 1;
+    int cont2 = 1;
+}
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <!-- START table-responsive-->
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Produto (Modelo / Descrição)</th>
+                                <th>Conferido?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ProdutosEmEstoqueViewModelsCollection)
+                            {
+                                <tr>
+                                    <td>@cont</td>
+                                    <td>
+                                        <p>@string.Format("{0} / {1}", item.Modelo, item.Descricao)</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="switch">
+                                            <input type="checkbox" data-value="@item.Codigo" value="@item.Codigo" onchange="RealizarConferenciaManual('@item.Codigo')" />
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                cont++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <!-- START table-responsive-->
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Produto (Modelo / Descrição)</th>
+                                <th>Conferido?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.ProdutosConferidosModelsCollection)
+                        {
+                            <tr>
+                                <td>@cont2</td>
+                                <td>
+                                    <p>@string.Format("{0} / {1}", item.Modelo, item.Descricao)</p>
+                                </td>
+                                <td class="text-center">
+                                    <label class="switch">
+                                        <input type="checkbox" checked="checked" data-value="@item.Codigo" value="@item.Codigo" onchange="RealizarConferenciaManual('@item.Codigo')" />
+                                        <span></span>
+                                    </label>
+                                </td>
+                            </tr>
+                            cont2++;
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+}
+
+
+

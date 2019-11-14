@@ -1,0 +1,39 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.CategoriaViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Editar Categoria";
+}
+
+<h3>
+    @ViewBag.Title
+    <small>Formulário de edição de categoria</small>
+</h3>
+@Html.Partial("_ErrorSummary")
+@using (Html.BeginForm("Edit", "Categoria", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <fieldset>
+                <legend>Dados Cadastrais</legend>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row text-center">
+                @Html.ActionLink("Voltar", "Estoque", "Home", null, new { @class = "btn btn-sm btn-default" })
+                <button type="submit" class="btn btn-primary btn-sm">Registrar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

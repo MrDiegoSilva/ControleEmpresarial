@@ -1,0 +1,81 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.MarcaViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Detalhar Marca";
+}
+
+
+<h3>
+    @ViewBag.Title
+    <small>Formulário de detahamento de marca</small>
+</h3>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset>
+            <legend>Dados Cadastrais</legend>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+        </fieldset>
+        <div class="row text-center">
+            @Html.ActionLink("Voltar", "Estoque", "Home", null, new { @class = "btn btn-sm btn-default" })
+            @Html.ActionLink("Editar", "Edit", "Marca", new { id = Model.Id }, new { @class = "btn btn-sm btn-primary" })
+            <button id="deletarMarca" type="button" class="btn btn-sm btn-danger">Deletar</button>
+            @Html.HiddenFor(model => model.Id)
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+        $(document).ready(function () {
+            $('#deletarMarca').on('click', function (e) {
+                e.preventDefault();
+                swal({
+                    title: "Tem certeza disso?",
+                    text: "Você não poderá recuperar essa marca!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sim, deletar isso!",
+                    cancelButtonText: "Não, cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        var valor = $("#Id").val();
+                        excluirMarca(valor);
+                    } else {
+                        swal("Cancelado", "Não houve alteração nos dados :)", "error");
+                    }
+                });
+            });
+
+            function excluirMarca(valor) {
+                $.ajax({
+                    url: '@Url.Action("Delete","Marca")',
+                    type: 'POST',
+                    async: true,
+                    data: {
+                        id: valor
+                    }
+                }).success(function (data) {
+                    swal("Deletado!", "Marca excluida com sucesso.", "success");
+                }).fail(function (data) {
+                    swal("Erro!", "Erro ao excluir marca.", "warning");
+                }).done(function(data) {
+                    window.location.replace('@Url.Action("BuscarMarca")');
+                });
+            }
+        });
+    </script>
+}

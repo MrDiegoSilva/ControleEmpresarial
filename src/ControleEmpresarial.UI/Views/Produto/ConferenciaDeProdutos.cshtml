@@ -1,0 +1,165 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.BuscarProdutoViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Conferência de Estoque";
+    int cont = 1;
+}
+
+<div class="content-heading">
+    @ViewBag.Title
+    <small>Formulario de conferência de produtos!</small>
+</div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- START panel-->
+            <div id="panelDemo14" class="panel panel-default">
+                <div class="panel-heading">Relacionar Inventário</div>
+                <div class="panel-body">
+                    <div role="tabpanel">
+                        <!-- Nav tabs-->
+                        <ul role="tablist" class="nav nav-tabs">
+                            <li role="presentation" class="active">
+                                <a href="#codigo" aria-controls="codigo" role="tab" data-toggle="tab">Todo o Estoque</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes-->
+                        <div class="tab-content">
+
+                            <div id="codigo" role="tabpanel" class="tab-pane active">
+                                @using (Html.BeginForm("ConferenciaDeProdutos", "Produto", FormMethod.Post))
+                                {
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.StatusDoProduto, new { @class = "control-label" })
+                                            @Html.EnumDropDownListFor(model => model.StatusDoProduto, new { @class = "form-control", @placeholder = "Descrição", @Required = "required"})
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.LocalidadeId)
+                                            @Html.DropDownListFor(model => model.LocalidadeId, (SelectList)ViewBag.ListaLocalidade, new { @class = "form-control", @Required = "required" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            @Html.LabelFor(model => model.SessaoId)
+                                            @Html.DropDownListFor(model => model.SessaoId, (SelectList)ViewBag.ListaSessao, null, new {@class = "form-control"})
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Buscar</button>
+                                    </div>
+                                }
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END panel-->
+    </div>
+    @if (Model != null)
+    {
+        <div class="row">
+            <div class="form-group col-md-12">
+                @using (Ajax.BeginForm("RealizarConferencia", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ConferirOk", OnFailure = "ConferirFalhou", UpdateTargetId = "listaProdutos", InsertionMode = InsertionMode.Replace }, new { id = "conferencia" }))
+                {
+                    @Html.LabelFor(model => model.Codigo, new { @class = "control-label" })
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Código" } })
+                        <span class="input-group-btn">
+                            <button id="btnFocus" type="button" class="btn btn-default">
+                                <em class="fa fa-barcode"></em>
+                            </button>
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="listaProdutos" class="container-fluid">
+            @Html.Partial("_ListaProdutosConferencia", Model)
+        </div>
+    }
+</div>
+@section Styles {
+    @Styles.Render("~/bundles/typeaheadCss")
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/typeaheadJs")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        $('document').ready(function () {
+            $("#Codigo").val("");
+            $("#Codigo").focus();
+            valor = $("#LocalidadeId").val();
+            CapturarSessaoDaLocalidade(valor);
+        });
+
+        $("#btnFocus").on("click", function () {
+                $("#Codigo").focus();
+        });
+
+        $("#LocalidadeId").on("change",
+            function() {
+                valor = $(this).val();
+                CapturarSessaoDaLocalidade(valor);
+            });
+
+        function CapturarSessaoDaLocalidade(valor) {
+            $sessao = $('#SessaoId');
+            $.ajax({
+                url: '@Url.Action("RetornarSessaoDaLocalidade","Sessao")',
+                type: 'GET',
+                async: true,
+                data: {
+                    localidadeId: valor
+                }
+            }).done(function (data) {
+                if (data.length > 0) {
+                    var option = "";
+                    for (i = 0; i < data.length; i++) {
+                        option += "<option value=\"" + data[i].Id + "\">" + data[i].Descricao + "</option>";
+                    }
+                    $sessao.html(option).trigger("chosen:updated");
+                } else {
+                    $sessao.html('<option></option>').trigger("chosen:updated");
+                }
+            }).fail(function (data) {
+                $sessao.html('<option></option>').trigger("chosen:updated");
+            });
+        }
+
+        function RealizarConferenciaManual(codigo) {
+            $.ajax({
+                url: '@Url.Action("RealizarConferenciaManual")',
+                type: 'POST',
+                async: true,
+                data: {
+                    codigo: codigo
+                }
+            }).done(function (data) {
+                $("#listaProdutos").empty();
+                $("#listaProdutos").append(data);
+            }).fail(function (data) {
+                swal("Erro ao conferir produto!");
+                $("#Codigo").val("");
+                $("#Codigo").focus();
+            });
+        };
+
+        function ConferirFalhou() {
+            swal("Produto não encontrado na lista do estoque!");
+            $("#Codigo").val("");
+            $("#Codigo").focus();
+        }
+
+        function ConferirOk() {
+            $("#Codigo").val("");
+            $("#Codigo").focus();
+        }
+    </script>
+}

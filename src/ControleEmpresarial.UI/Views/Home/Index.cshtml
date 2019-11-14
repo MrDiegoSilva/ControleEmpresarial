@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <em class="icon-bag fa-5x"></em>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="text-lg">Estoque</div>
+                        <p class="m0">Gerencie seu Estoque!</p>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Estoque")" class="panel-footer bg-gray-dark bt0 clearfix btn-block">
+                <span class="pull-left">Acessar Módulo</span>
+                <span class="pull-right">
+                    <em class="fa fa-chevron-circle-right"></em>
+                </span>
+            </a>
+            <!-- END panel-->
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <em class="icon-basket fa-5x"></em>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="text-lg">Vendas</div>
+                        <p class="m0">Controle suas Vendas!</p>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Vendas")" class="panel-footer bg-gray-dark bt0 clearfix btn-block">
+                <span class="pull-left">Acessar Módulo</span>
+                <span class="pull-right">
+                    <em class="fa fa-chevron-circle-right"></em>
+                </span>
+            </a>
+        </div>
+        <!-- END panel-->
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <em class="icon-wallet fa-5x"></em>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="text-lg">Erário</div>
+                        <p class="m0">Organize suas finanças!</p>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Vendas")"class="panel-footer bg-gray-dark bt0 clearfix btn-block">
+                <span class="pull-left">Acessar Módulo</span>
+                <span class="pull-right">
+                    <em class="fa fa-chevron-circle-right"></em>
+                </span>
+            </a>
+        </div>
+        <!-- END panel-->
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <em class="icon-people fa-5x"></em>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="text-lg">RH</div>
+                        <p class="m0">Priorize os acessos!</p>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Acessos")" class="panel-footer bg-gray-dark bt0 clearfix btn-block">
+                <span class="pull-left">Acessar Módulo</span>
+                <span class="pull-right">
+                    <em class="fa fa-chevron-circle-right"></em>
+                </span>
+            </a>
+        </div>
+        <!-- END panel-->
+    </div>
+</div>
+

@@ -1,0 +1,228 @@
+﻿@using ControleEmpresarial.UI.Helpers
+@model ControleEmpresarial.Estoque.Application.ViewModel.ProdutoViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Cadastro de Produtos";
+}
+
+<div class="content-heading">
+    @ViewBag.Title
+    <small>Formulário de cadastro de produtos</small>
+</div>
+
+@Html.Partial("_ErrorSummary")
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.MarcaId)
+    @Html.HiddenFor(model => model.MaterialId)
+    @Html.HiddenFor(model => model.CategoriaId)
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <fieldset>
+                <legend class="text-center">Informacional</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.CategoriaId)
+                        @Html.AutocompleteFor(model => model.Categoria.Descricao, model => model.CategoriaId, "CapturarCategoriaAutoComplete", "Categoria", false)
+                        @Html.ValidationMessageFor(model => model.CategoriaId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Localidade")
+                        @Html.DropDownListFor(model => model.Sessao.LocalidadeId, (SelectList)ViewBag.ListaLocalidade, new { @class = "form-control", @Required = "required" })
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <fieldset>
+                <legend>Dados Cadastrais</legend>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Modelo, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Modelo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Modelo" } })
+                        @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", @placeholder = "Descrição" } })
+                        @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset id="especificacao">
+                <legend>Especificação Técnica</legend>
+                <div class="row">
+
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.TamanhoAro, new { @class = "control-label" })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.TamanhoAro, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tamanho do Aro" } })
+                            <span class="input-group-addon">
+                                <em class="fa fa-square-o"></em>
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.TamanhoAro, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.TamanhoPonte, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TamanhoPonte, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tamanho da Ponte" } })
+                        @Html.ValidationMessageFor(model => model.TamanhoPonte, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.ComprimentoHaste, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.ComprimentoHaste, new { htmlAttributes = new { @class = "form-control", @placeholder = "Comprimento da Haste" } })
+                        @Html.ValidationMessageFor(model => model.ComprimentoHaste, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(model => model.Curvatura, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Curvatura, new { htmlAttributes = new { @class = "form-control", @placeholder = "Curvatura" } })
+                        @Html.ValidationMessageFor(model => model.Curvatura, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(model => model.AlturaLente, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.AlturaLente, new { htmlAttributes = new { @class = "form-control", @placeholder = "Altura da Lente" } })
+                        @Html.ValidationMessageFor(model => model.AlturaLente, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Cor)
+                        @Html.EditorFor(model => model.Cor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Cor" } })
+                        @Html.ValidationMessageFor(model => model.Cor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.MarcaId)
+                        @Html.AutocompleteFor(model => model.Marca.Descricao, model => model.MarcaId, "CapturarMarcasAutoComplete", "Marca", false)
+                        @Html.ValidationMessageFor(model => model.MarcaId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.MaterialId)
+                        @Html.AutocompleteFor(model => model.Material.Descricao, model => model.MaterialId, "CapturarMaterialAutoComplete", "Material", false)
+                        @Html.ValidationMessageFor(model => model.MaterialId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Dados Financeiros</legend>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.ValorCompra)
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            @Html.EditorFor(model => model.ValorCompra, new { htmlAttributes = new { @class = "form-control", @placeholder = "0,00" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ValorCompra, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.ValorVenda)
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            @Html.EditorFor(model => model.ValorVenda, new { htmlAttributes = new { @class = "form-control", @placeholder = "0,00" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ValorVenda, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Armazenamento</legend>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.SessaoId)
+                        @Html.DropDownListFor(model => model.SessaoId, (SelectList)ViewBag.ListaSessao, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SessaoId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Duplicar, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Duplicar, new { htmlAttributes = new { @class = "form-control", @placeholder = "20" } })
+                    </div>
+                </div>
+                <div class="row" id="listaOpcoes">
+                    
+                </div>
+            </fieldset>
+
+            <div class="text-center">
+                @Html.ActionLink("Voltar", "Estoque", "Home", null, new { @class = "btn btn-sm btn-default" })
+                <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Styles
+{
+    @Styles.Render("~/bundles/typeaheadCss")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/typeaheadJs")
+    <script>
+    $(document).ready(function () {
+        valor = $("#Sessao_LocalidadeId").val();
+        $("#listaOpcoes").hide();
+        CapturarSessaoDaLocalidade(valor);
+    });
+
+    $("#Categoria_Descricao").on("change", function () {
+        valor = $(this).val();
+        if (valor.toUpperCase() === "ARMAÇÃO" || valor.toUpperCase() === "SOLAR" ) {
+            $("#especificacao").show();
+        } else {
+            $("#especificacao").hide();
+        }
+    });
+
+    //$("#Duplicar").on("change", function() {
+    //    valor = $(this).val();
+    //    if (valor > 0) {
+    //        $("#listaOpcoes").show('1000');
+    //    }
+    //});
+
+    $("#Sessao_LocalidadeId").on("change", function() {
+        valor = $(this).val();
+        CapturarSessaoDaLocalidade(valor);
+    });
+
+    function CapturarSessaoDaLocalidade(valor) {
+        $sessao = $('#SessaoId');
+        $.ajax({
+            url: '@Url.Action("RetornarSessaoDaLocalidade","Sessao")',
+            type: 'GET',
+            async: true,
+            data: {
+                localidadeId: valor
+            }
+        }).done(function (data) {
+            if (data.length > 0) {
+                var option = "";
+                for (i = 0; i < data.length; i++) {
+                    option += "<option value=\"" + data[i].Id + "\">" + data[i].Descricao + "</option>";
+                }
+                $sessao.html(option).trigger("chosen:updated");
+            } else {
+                $sessao.html('<option></option>').trigger("chosen:updated");
+            }
+        }).fail(function (data) {
+            $sessao.html('<option></option>').trigger("chosen:updated");
+        });
+    }
+
+    </script>
+}
+
+

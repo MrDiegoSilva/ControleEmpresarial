@@ -1,0 +1,29 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.SessaoViewModel
+
+@{
+    Layout = null;
+}
+
+@using (Ajax.BeginForm("Edit", "Sessao", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "BuscarRegistroOk", OnFailure = "BuscarRegistroFalhou", OnBegin = "Requisitando", OnComplete = "Completado", UpdateTargetId = "listaSessao", InsertionMode = InsertionMode.Replace }, new { id = "frmCriarSessao" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.LocalidadeId)
+    @Html.HiddenFor(model => model.Id)
+    <div class="container-fluid">
+        <fieldset>
+            <legend>Dados Cadastrais</legend>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", @placeholder = "Descrição" } })
+                    @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-sm btn-primary">Salvar</button>
+    </div>
+}

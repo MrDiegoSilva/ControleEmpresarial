@@ -1,0 +1,38 @@
+﻿
+@{
+    var lista = (List<string>)TempData["AlertMessage"];
+    var mensagem = TempData["Mensagem"] as string;
+}
+
+
+@if (!string.IsNullOrEmpty(mensagem))
+{
+    if (lista != null && lista.Any())
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <ul>
+                @foreach (var item in lista)
+                {
+                    <li class="msgRetorno">@item</li>
+                }
+            </ul>
+        </div>
+    }
+}
+else
+{
+    if (lista != null && lista.Any())
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h3>Opa! Alguma coisa não deu certo:</h3>
+            <ul>
+                @foreach (var item in lista)
+                {
+                    <li class="msgRetorno">@item</li>
+                }
+            </ul>
+        </div>
+    }
+}

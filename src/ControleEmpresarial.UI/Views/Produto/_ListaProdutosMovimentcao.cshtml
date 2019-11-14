@@ -1,0 +1,54 @@
+﻿@model ICollection<ControleEmpresarial.Estoque.Application.ViewModel.ProdutoViewModel>
+@{
+    Layout = null;
+    int cont = 1;
+}
+<!-- JSON-->
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Material</th>
+                                <th>Marca</th>
+                                <th>Valor</th>
+                                <th>Movimentar Produto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Descricao</td>
+                                    <td>@item.Material.Descricao</td>
+                                    <td>@item.Marca.Descricao</td>
+                                    <td>R$@item.ValorCompra</td>
+                                    <td class="">
+                                        @using (Html.BeginForm("RealizarMovimentacao", "Produto", FormMethod.Post))
+                                        {
+                                            <input type="hidden" name="id" id="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <em class="fa fa-sign-out"></em>&nbsp; Realizar Venda
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div role="alert" class="alert alert-danger">
+                    <strong>Oops!</strong> &nbsp; Não foram encontrados produtos com essas especificações.
+                </div>
+            }
+        </div>
+    </div>
+</div>

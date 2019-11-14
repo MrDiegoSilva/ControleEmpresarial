@@ -1,0 +1,139 @@
+﻿@model ControleEmpresarial.Estoque.Application.ViewModel.LocalidadeViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEstoque.cshtml";
+    ViewBag.Title = "Editar Local";
+}
+
+<h3>
+    @ViewBag.Title
+    <small>Formulário de edição de localidade</small>
+</h3>
+@Html.Partial("_ErrorSummary")
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset>
+            <legend>Dados Cadastrais</legend>
+            @using (Html.BeginForm("Edit", "Local", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-8">
+                        @Html.LabelFor(model => model.Endereco, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Endereco, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Endereco, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <div class="row text-center">
+                    @Html.ActionLink("Voltar", "Estoque", "Home", null, new { @class = "btn btn-sm btn-default" })
+                    <button type="submit" class="btn btn-primary btn-sm">Registrar</button>
+                </div>
+            }
+        </fieldset>
+        <fieldset>
+            <legend>Lista de Sessões</legend>
+            <div id="listaSessao">
+                @Html.Partial("~/Views/Sessao/_ListaSessao.cshtml", Model.SessoesCollection)
+            </div>
+        </fieldset>
+    </div>
+</div>
+@section BodyArea{
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id="formSessao" class="modal-body">
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/datatablesCss")
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/demoDatatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        function alertaSessao(sessaoId, localidadeId) {
+            swal({
+                    title: "Tem certeza disso?",
+                    text: "Você não poderá recuperar essa sessão!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sim, deletar isso!",
+                    cancelButtonText: "Não, cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        excluirSessao(sessaoId, localidadeId);
+                    } else {
+                        swal("Cancelado", "Não houve alteração nos dados :)", "error");
+                    }
+                });
+        };
+
+        function excluirSessao(sessaoId, localidadeId) {
+            $.ajax({
+                url: '@Url.Action("Delete","Sessao")',
+                type: 'POST',
+                async: true,
+                data: {
+                    sessaoId: sessaoId,
+                    localidadeId: localidadeId
+                }
+            }).success(function(data) {
+                swal("Deletado!", "Sessao excluido com sucesso.", "success");
+                $("#listaSessao").empty();
+                $("#listaSessao").append(data);
+            }).fail(function(data) {
+                swal("Erro!", "Erro ao excluir sessão.", "warning");
+            });
+        }
+
+        function AddSessao() {
+            $.get('@Url.Action("Create", "Sessao")',
+                { localidadeId: '@Model.Id' },
+                function(data) {
+                    $("#formSessao").html(data);
+                    $("#modal").modal("show");
+                });
+        };
+
+        function EditarSessao(id) {
+            $.get('@Url.Action("Edit", "Sessao")',
+                { id: id },
+                function(data) {
+                    $("#formSessao").html(data);
+                    $("#modal").modal("show");
+                });
+        }
+
+        function BuscarRegistroOk(data) {
+            appDataTable();
+            $("#modal").modal("hide");
+        }
+
+        function BuscarRegistroFalhou(data) {
+            appDataTable();
+            $("#modal").modal("hide");
+        }
+    </script>
+}
